@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<!-- import CSS -->
+	<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+	<div id="init_tc">
+		<el-select v-model="value2" placeholder="请选择业务模块">
+			<el-option
+				v-for="item in options_module"
+				:key="item.value"
+				:label="item.label"
+				:value="item.value"
+				:disabled="item.disabled">
+			</el-option>
+		</el-select>
+		<el-select v-model="value2" placeholder="请选择模板">
+			<el-option
+				v-for="item in options_template"
+				:key="item.value"
+				:label="item.label"
+				:value="item.value"
+				:disabled="item.disabled">
+			</el-option>
+		</el-select>
+		<el-input id="input_pkg" v-model="input" placeholder="请输入专题名"></el-input>
+		<el-input id="input_ver" v-model="input" placeholder="请输入专题名">\<ver\></el-input>
+		<el-input id="input_title" v-model="input" placeholder="请输入案例名"></el-input>
+		<el-input id="input_pkg" v-model="input" placeholder="请输入专题名"></el-input>
+		<el-input id="input_description" v-model="input" placeholder="请输入标题"></el-input>
+		<el-input id="input_script" v-model="input" placeholder="请输入脚本"></el-input>
+	</div>
+	<div id="tc"></div>
+	<!-- <div id="commit">
+		<el-button @click="visible = true">commit</el-button>
+		<el-dialog :visible.sync="visible" title="Hello world">
+			<p>Try Element</p>
+		</el-dialog>
+	</div> -->
+</body>
+	<!-- import Vue before Element -->
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+	<!-- import JavaScript -->
+	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+	<!-- import Babel -->
+<!-- 	<script src="https://cdn.bootcss.com/babel-standalone/7.0.0-beta.3/babel.js"></script>
+ --><!-- 	<script>
+		new Vue({
+			el: '#commit',
+			data: function() {
+				return { visible: false }
+			}
+			
+		})
+	</script> -->
+	<script type="module">
+		export default {
+			data(){
+				return {
+					options_module: [{
+						value: '0',
+						label: '融资融券交易'
+					}, {
+						value: '1',
+						label: '融资融券管理',				
+					}, {
+						value: '2',
+						label: '信用创新业务'
+					}],
+					options_template: [{
+						value: '0',
+						label: '柜台'
+					}, {
+						value: '1',
+						label: 'testapp',				
+					}],
+					value2: ''
+				}
+			}
+		}
+	</script>
+</html>
