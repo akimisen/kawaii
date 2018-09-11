@@ -1,6 +1,5 @@
 from flask.views import MethodView 
-from flask import Flask, jsonify
-from flask import request
+from flask import Flask, jsonify, request, make_response
 
 app=Flask(__name__)
 
@@ -31,9 +30,18 @@ def index():
 def api():
     return 'api'
 
-@app.route('/test')
+@app.route('/test', methods=['GET','POST'])
 def test():
-    return 'test'
+    params = request.json if request.method == "POST" else request.args
+    try:
+        print(params)
+    except Exception as e:
+        logging.exception(e)
+    response = make_response(jsonify(code=200, status=0, message='ok', data={}))
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'POST'
+    response.headers['Access-Control-Allow-Headers'] = 'x-requested-with,content-type' 
+    return response
 
 def shutdown_server():
 	func = request.environ.get('werkzeug.server.shutdown')

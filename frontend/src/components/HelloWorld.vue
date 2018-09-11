@@ -19,14 +19,12 @@
         <el-input v-model="form.version"></el-input>
       </el-form-item>
       <el-form-item label="jira号1">
-        <el-input>
-          <el-autocomplete
-            size="small" 
-            v-model="form.jira1"
-            :fetch-suggestions="fetch_suggestions_jira1"
-            placeholder=""
-            @select="handleSelect" slot="prepend">
-          </el-autocomplete>
+        <el-input placeholder="" v-model="form.jira1" class="input-with-select">
+          <el-select v-model="form.jira1_select" slot="prepend" placeholder="">
+            <el-option label="SECREQ" value="1"></el-option>
+            <el-option label="SECGPZY" value="2"></el-option>
+            <el-option label="SECRZRQ" value="3"></el-option>
+          </el-select>
         </el-input>
       </el-form-item>
       <el-form-item label="jira号2" v-model='form.jira2'>
@@ -67,7 +65,7 @@
           theme: '',
           version: '',
           jira1: '',
-          jira1_suggestions: [],
+          jira1_select: '1',
           jira2: '',
           author: '钱秋实',
           date: '',
@@ -79,35 +77,18 @@
     methods: {
       onSubmit() {
         var data = JSON.stringify(this.form);
-        this.$http.post('/test/', data).then((response) => {
-          // success callback
+        console.log(data);
+        this.$http.post('http://127.0.0.1:5000/test', data, {"emulateJSON":true}).then((response) => {
+          // successful callback
+          console.log('succeed!');
         }, (response) => {
+          // failure callback
           console.log('oops...');
         })
       },
-      fetch_suggestions_jira1(queryString, cb) {
-        var jira1_suggestions = this.form.jira1_suggestions;
-        var results = queryString ? jira1_suggestions.filter(this.createFilter(queryString)) : jira1_suggestions;
-        cb(results);
-      },
-      load_suggestions_jira1() {
-        return [
-          { "value": "SECREQ -" },
-          { "value": "SECGPZY-" },
-          { "value": "SECRZRQ-" }
-        ];
-      },
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
-      },
-      createFilter(queryString) {
-        return (jira1) => {
-          return (jira1.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-        };
       }
-    },
-    mounted() {
-      this.form.jira1_suggestions = this.load_suggestions_jira1();
     }
   }
 </script>
@@ -123,5 +104,8 @@ el-form {
 }
 .radiogroup {
   text-align: left
+}
+.el-select {
+  width: 110px;
 }
 </style>
