@@ -3,17 +3,21 @@ from flask import Flask, jsonify
 
 app=Flask(__name__)
 
-class TaskApi(MethodView):
+class TestcaseApi(MethodView):
 	def get(self):
-		return jsonify({'task0':'get'})
+		return jsonify({'Testcase0':'get'})
 
 	def post(self):
-		return jsonify({'task1':'post'})
+		return jsonify({'Testcase1':'post'})
 
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
 
-app.add_url_rule('/tasks/', view_func=TaskApi.as_view('tasks'))
+@app.route('/test/', methods=['POST','GET'])
+def test():
+    return 'Hello, World!'
+
+app.add_url_rule('/Testcases/', view_func=TestcaseApi.as_view('Testcases'))
 
 app.run(debug=True)

@@ -1,55 +1,17 @@
-<template> 
-  <div id="init_tc">
-    <el-select v-model="value2" placeholder="选择业务模块">
-      <el-option
-        v-for="item in options_module"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-        :disabled="item.disabled">
-      </el-option>
-    </el-select>
-    <el-select v-model="value2" placeholder="选择模板">
-      <el-option
-        v-for="item in options_template"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-        :disabled="item.disabled">
-      </el-option>
-    </el-select>
-    <el-input id="input_pkg" v-model="input" placeholder="输入专题名"></el-input>
-    <el-input id="input_ver" v-model="input" placeholder="输入版本号">ver</el-input>
-    <el-input id="input_title" v-model="input" placeholder="输入案例名"></el-input>
-    <el-input id="input_author" v-model="input" placeholder="输入作者"></el-input>
-    <el-input id="input_description" v-model="input" placeholder="输入描述"></el-input>
-    <el-input id="input_script" v-model="input" placeholder="关联脚本"></el-input>
-  </div>
-</template> 
-
-<script>
-  export default {
-    data(){
-      return {
-        options_module: [{
-          value: '0',
-          label: '融资融券交易'
-        }, {
-          value: '1',
-          label: '融资融券管理',        
-        }, {
-          value: '2',
-          label: '信用创新业务'
-        }],
-        options_template: [{
-          value: '0',
-          label: '柜台'
-        }, {
-          value: '1',
-          label: 'testapp',       
-        }],
-        value2: ''
-      }
-    }
-  }
-</script>
+<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+    <el-menu-item index="1">处理中心</el-menu-item>
+    <el-submenu index="2">
+      <template slot="title">我的工作台</template>
+        <el-menu-item index="2-1">选项1</el-menu-item>
+        <el-menu-item index="2-2">选项2</el-menu-item>
+        <el-menu-item index="2-3">选项3</el-menu-item>
+        <el-submenu index="2-4">
+          <template slot="title">选项4</template>
+            <el-menu-item index="2-4-1">选项1</el-menu-item>
+            <el-menu-item index="2-4-2">选项2</el-menu-item>
+            <el-menu-item index="2-4-3">选项3</el-menu-item>
+        </el-submenu>
+    </el-submenu>
+    <el-menu-item index="3" disabled>消息中心</el-menu-item>
+    <el-menu-item index="4"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>
+  </el-menu>

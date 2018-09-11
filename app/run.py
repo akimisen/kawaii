@@ -23,9 +23,17 @@ class TaskApi(MethodView):
 	def post(self):
 		pass
 
+@app.route('/')
+def index():
+    return 'Hello,Wolld!'
+
 @app.route('/api')
 def api():
     return 'api'
+
+@app.route('/test')
+def test():
+    return 'test'
 
 def shutdown_server():
 	func = request.environ.get('werkzeug.server.shutdown')

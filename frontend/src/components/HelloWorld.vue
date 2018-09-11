@@ -1,140 +1,98 @@
-<template> 
-  <div id="app">
-    <div id="nav">   
-    </div>
-    <div id="init_tc">     
-      <el-row :gutter="20">
-        <el-col :span="3">
-          <el-autocomplete
-            class="grid-content bg-purple" size="small" 
-            v-model="state1"
-            :fetch-suggestions="querySearch0"
-            placeholder="选择业务模块"
-            @select="handleSelect">
-          </el-autocomplete>
-        </el-col>
-        <el-col :span="3">
-          <el-autocomplete
-            class="grid-content bg-purple" size="small" 
-            v-model="state1"
-            :fetch-suggestions="querySearch1"
-            placeholder="选择模板"
-            @select="handleSelect">
-          </el-autocomplete>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="6">
-          <el-input class="grid-content bg-purple" size="small" id="input" v-model="input0" placeholder="输入专题名"></el-input>
-        </el-col>
-        <el-col :span="6">
-          <el-input class="grid-content bg-purple" size="small" id="input" v-model="input1" placeholder="输入版本号">ver</el-input>
-        </el-col>
-        <el-col :span="6">
-          <el-input class="grid-content bg-purple" size="small" id="input" v-model="input2" placeholder="输入案例名"></el-input>
-        </el-col>
-        <el-col :span="6">
-          <el-input class="grid-content bg-purple" size="small" id="input" v-model="input3" placeholder="输入描述"></el-input>
-        </el-col>
-        <el-col :span="6">
-          <el-input class="grid-content bg-purple" size="small" id="input" v-model="input4" placeholder="输入案例名"></el-input>
-        </el-col>
-      </el-row>
-    </div>
+<template>
+<div id="container">
+  <div id="left">
+    <el-form ref="form" :model="form" label-width="80px">
+      <el-form-item label="案例名称">
+        <el-input v-model="form.name"></el-input>
+      </el-form-item>
+      <el-form-item label="业务模块">
+        <el-radio-group class="radiogroup" v-model="form.module">
+          <el-radio label="融资融券交易"></el-radio>
+          <el-radio label="融资融券管理"></el-radio>
+          <el-radio label="股票质押"></el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="专题名称">
+        <el-input v-model="form.theme"></el-input>
+      </el-form-item>
+      <el-form-item label="版本信息">
+        <el-input v-model="form.version"></el-input>
+      </el-form-item>
+      <el-form-item label="jira号1" v-model='form.jira1'>
+        <el-input v-model="form.jira1"><template slot="prepend">SECREQ -</template></el-input>
+      </el-form-item>
+      <el-form-item label="jira号2" v-model='form.jira2'>
+        <el-input v-model="form.jira2"><template slot="prepend">SECTEST-</template></el-input>
+      </el-form-item>
+      <el-form-item label="提交人">
+        <el-input v-model="form.author"></el-input>
+      </el-form-item>
+      <el-form-item label="提交日期">
+        <el-date-picker type="date" value-format="yyyyMMdd" placeholder="请选择日期" v-model="form.date" style="width: 100%;"></el-date-picker>    
+      </el-form-item>
+      <el-form-item label="备注信息">
+        <el-input type="textarea" v-model="form.note"></el-input>
+      </el-form-item>
+      <el-form-item label="选择模板">
+        <el-radio-group class="radiogroup" v-model="form.template">
+          <el-radio label="前台"></el-radio>
+          <el-radio label="testapp"></el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">创建案例</el-button>
+        <el-button>取消</el-button>
+      </el-form-item>
+    </el-form>
   </div>
-</template> 
-
+  <div></div>
+  <div id="right"></div>
+</div>
+</template>
 <script>
   export default {
     data() {
       return {
-        modules: [],
-        templates: [],
-        state1: '',
-        state2: ''
+        form: {
+          name: '',
+          module: '',
+          theme: '',
+          version: '',
+          jira1: '',
+          jira2: '',
+          author: '钱秋实',
+          date: '',
+          template: '',
+          note: ''
+        }
       };
     },
     methods: {
-      querySearch0(queryString, cb) {
-        var modules = this.modules;
-        var results0 = queryString ? modules.filter(this.createFilter0(queryString)) : modules;
-        // 调用 callback 返回建议列表的数据
-        cb(results0);
+      onSubmit() {
+        var data = JSON.stringify(this.form);
+        this.$http.post('/test/', data).then((response) => {
+          // success callback
+        }, (response) => {
+          console.log('oops...')
+        });
       },
-      querySearch1(queryString, cb) {
-        var templates = this.templates;
-        var results1 = queryString ? templates.filter(this.createFilter1(queryString)) : templates;
-        // 调用 callback 返回建议列表的数据
-        cb(results1);
-      },
-      createFilter0(queryString) {
-        return (module) => {
-          return (module.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-        };
-      },
-      createFilter1(queryString) {
-        return (template) => {
-          return (template.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-        };
-      },
-      loadModules() {
-        return [
-          { "value": "融资融券交易" },
-          { "value": "融资融券管理" },
-          { "value": "股票质押" }
-        ];
-      },
-      loadTemplates() {
-        return [
-          { "value": "柜台" },
-          { "value": "testapp" }
-        ];
-      },
-      handleSelect(item) {
-        console.log(item);
+      handleSelect(key, keyPath) {
+        console.log(key, keyPath);
       }
-    },
-    mounted() {
-      this.modules = this.loadModules();
-      this.templates = this.loadTemplates();
     }
   }
 </script>
-
-<style scoped>
-.el-row {
-  margin-bottom: 20px;
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-.el-col {
-  border-radius: 4px;
-}
-.bg-purple-dark {
-  background: #99a9bf;
-}
-.bg-purple {
-  background: #d3dce6;
-}
-.bg-purple-light {
-  background: #e5e9f2;
-}
-.grid-content {
-  border-radius: 4px;
-  min-height: 36px;
-}
-.row-bg {
-  padding: 10px 0;
-  background-color: #f9fafc;
-}
-
-</style>
 <style>
 body {
   overflow: hidden;
 }
-el-row {
-  padding: 5px 0;
+div {
+  width: 360px;
+}
+el-form {
+  size: small;
+}
+.radiogroup {
+  text-align: left
 }
 </style>
