@@ -18,8 +18,16 @@
       <el-form-item label="版本信息">
         <el-input v-model="form.version"></el-input>
       </el-form-item>
-      <el-form-item label="jira号1" v-model='form.jira1'>
-        <el-input v-model="form.jira1"><template slot="prepend">SECREQ -</template></el-input>
+      <el-form-item label="jira号1">
+        <el-input>
+          <el-autocomplete
+            size="small" 
+            v-model="form.jira1"
+            :fetch-suggestions="fetch_suggestions_jira1"
+            placeholder=""
+            @select="handleSelect" slot="prepend">
+          </el-autocomplete>
+        </el-input>
       </el-form-item>
       <el-form-item label="jira号2" v-model='form.jira2'>
         <el-input v-model="form.jira2"><template slot="prepend">SECTEST-</template></el-input>
@@ -59,6 +67,7 @@
           theme: '',
           version: '',
           jira1: '',
+          jira1_suggestions: [],
           jira2: '',
           author: '钱秋实',
           date: '',
@@ -73,12 +82,32 @@
         this.$http.post('/test/', data).then((response) => {
           // success callback
         }, (response) => {
-          console.log('oops...')
-        });
+          console.log('oops...');
+        })
+      },
+      fetch_suggestions_jira1(queryString, cb) {
+        var jira1_suggestions = this.form.jira1_suggestions;
+        var results = queryString ? jira1_suggestions.filter(this.createFilter(queryString)) : jira1_suggestions;
+        cb(results);
+      },
+      load_suggestions_jira1() {
+        return [
+          { "value": "SECREQ -" },
+          { "value": "SECGPZY-" },
+          { "value": "SECRZRQ-" }
+        ];
       },
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
+      },
+      createFilter(queryString) {
+        return (jira1) => {
+          return (jira1.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        };
       }
+    },
+    mounted() {
+      this.form.jira1_suggestions = this.load_suggestions_jira1();
     }
   }
 </script>
