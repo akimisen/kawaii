@@ -1,4 +1,4 @@
-from flask.views import MethodView 
+from flask.views import MethodView
 from flask import Flask, jsonify, request, make_response
 import logging
 import json
@@ -29,22 +29,18 @@ class TaskApi(MethodView):
 def index():
   return 'Hello,Wolld!'
 
-@app.route('/api')
+@app.route('/api', methods=['GET','POST'])
 def api():
-  return 'api'
-
-@app.route('/test', methods=['GET','POST','OPTIONS'])
-def test():
 	params = request.json if request.method == "POST" else request.args
 	try:
 		response = make_response(jsonify(code=200, status=0, message='ok', data={}))
 		response.headers['Access-Control-Allow-Origin'] = '*'
-		response.headers['Access-Control-Allow-Methods'] = ['POST','OPTIONS']
-		response.headers['Access-Control-Allow-Headers'] = 'x-requested-with,content-type' 
+		response.headers['Access-Control-Allow-Methods'] = ['GET','POST']
+		response.headers['Access-Control-Allow-Headers'] = 'x-requested-with,content-type'
 	except Exception as e:
 		logging.exception(e)
-	with open('tc {}.json'.format(datetime.datetime.now().strftime('%Y%m%d %H-%M-%S')),'w',encoding='gbk') as json_file:
-		json.dump(params,json_file,ensure_ascii=False)
+	# with open('tc {}.json'.format(datetime.datetime.now().strftime('%Y%m%d %H-%M-%S')),'w',encoding='gbk') as json_file:
+	# 	json.dump(params,json_file,ensure_ascii=False)
 	return response
 
 def shutdown_server():

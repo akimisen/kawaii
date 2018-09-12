@@ -46,7 +46,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit()">创建案例</el-button>
+        <el-button type="primary" @click="onSubmit(form)">创建案例</el-button>
         <el-button>取消</el-button>
       </el-form-item>
     </el-form>
@@ -74,14 +74,17 @@
       };
     },
     methods: {
-      onSubmit() {
-        var data = JSON.stringify(this.form);
+      onSubmit(someform) {
+        var data = JSON.stringify(this.someform);
         console.log(data);
-        this.$http.post('http://127.0.0.1:5000/api', data).then(function (response) {
+        this.$http.post('http://127.0.0.1:5000/test', data).then(function (response) {
           console.log(response);
         }).catch(function (error) {
           console.log(error);
         });
+      },
+      handleSelect(key, keyPath) {
+        console.log(key, keyPath);
       }
     }
   }
@@ -96,16 +99,6 @@ body {
   width: 37%;
   float: left;
   margin-top: 0;
-}
-#right {
-  position: relative;
-  margin-left: 40%;
-}
-#right-top {
-  height: 44px;
-}
-#right-bottom {
-  margin-top:20px;
 }
 el-form {
   size: small;
@@ -131,21 +124,6 @@ el-form {
 }
 .el-col {
   border-radius: 4px;
-}
-.tc_title__inner {
-  vertical-align: middle;
-  display: inline-block;
-  height: 44px;
-  text-align: center;
-  line-height: 44px;
-}
-.tc_steps {
-  height: 44px;
-  margin-top: 10px;
-}
-.tc_submit {
-  position: relative;
-  margin-bottom: 300px;
 }
 .bg-purple-dark {
   background: #99a9bf;
