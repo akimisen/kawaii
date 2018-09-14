@@ -4,9 +4,16 @@
     <el-row :gutter="10" class="tc-info-row">
       <el-col :span="3"><el-input class="tc-info-inner" v-model="dynamic_tc_form.jira1" placeholder="需求号"></el-input></el-col>
       <el-col :span="6"><el-input class="tc-info-inner" v-model="dynamic_tc_form.pkg" placeholder="专题包"></el-input></el-col>
-      <el-col :span="7"><el-input class="tc-info-inner" v-model="dynamic_tc_form.title" placeholder="案例名称"><template slot="prepend">TC</template></el-input></el-col>
+      <el-col :span="3"><el-input class="tc-info-inner" v-model="dynamic_tc_form.module" placeholder="模块"></el-input></el-col>
+      <el-col :span="3"><el-input class="tc-info-inner" v-model="dynamic_tc_form.version" placeholder="版本"></el-input></el-col>
+      <el-col :span="3">是否完成&nbsp;&nbsp;&nbsp;<el-switch class="tc-info-inner tc-info-status" v-model="status"></el-switch></el-col>
+      <div class="clearfloat"></div>
+    </el-row>
+    <el-row :gutter="10" class="tc-info-row">
+      <el-col :span="3"><el-input class="tc-info-inner" v-model="dynamic_tc_form.jira2" placeholder="任务号"></el-input></el-col>
+      <el-col :span="6"><el-input class="tc-info-inner" v-model="dynamic_tc_form.title" placeholder="案例名称"></el-input></el-col>
       <el-col :span="3"><el-input class="tc-info-inner" v-model="dynamic_tc_form.author" placeholder="作者"></el-input></el-col>
-      <el-col :span="3"><el-date-picker type="date" value-format="yyyyMMdd" placeholder="日期" v-model="dynamic_tc_form.date" style="width: 100%;"></el-date-picker></el-col>
+      <el-col :span="3"><el-date-picker type="date" value-format="yyyyMMdd" v-model="dynamic_tc_form.date" placeholder="日期" style="width: 100%;"></el-date-picker></el-col>
       <div class="clearfloat"></div>
     </el-row>
   </div>
@@ -51,22 +58,24 @@
 </template>
 
 <script>
-  import qs from 'qs';
   export default {
     data() {
       return {
         dynamic_tc_form: {
           api: 'tc_content',
+          jira1: '',
+          pkg: '',
           title: '',
           module: '',
           version: '',
-          pkg: '',
+          jira2: '',
           author: '钱秋实',
           date: '',
           steps: [{
             prerequisite: '', testdata: '', description: '', res1: '', res2: '', pass: true
           }]
-        }
+        },
+        status: false
       };
     },
     methods: {
@@ -78,23 +87,6 @@
         }).catch(function (error) {
           console.log(error);
         });
-        // var post = function (url, data, fn) {
-        //   var xhr = new XMLHttpRequest();
-        //   if (xhr.withCredentials === undefined) return false;
-        //   xhr.open("POST", url, true);
-        //   xhr.setRequestHeader("Content-Type", "application/json;charset=utf-8");  
-        //   xhr.onreadystatechange = function() {
-
-        //     if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 304)) {
-        //       fn.call(this, xhr.responseText);
-        //     }
-        //   };
-        //   xhr.send(data);
-        // }
-        // var callback = function(res){
-        //   console.log(res);
-        // }
-        // post('http://127.0.0.1:5000/api', tc_data, callback);
       },
       resetForm(form_name) {
         this.$refs[form_name].resetFields();
@@ -169,6 +161,9 @@ body {
 }
 .tc-info {
   margin: 20px 0;
+}
+.tc-info-status {
+  height: 40px;
 }
 .tc-title {
   margin: 10px 0;
