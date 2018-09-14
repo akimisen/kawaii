@@ -10,16 +10,7 @@ import '../node_modules/element-ui/lib/theme-chalk/index.css'
 Vue.config.productionTip = false
 /* eslint-disable no-new */
 Vue.use(ElementUI)
-Vue.prototype.$http = axios;
-
-const NotFound = { template: '<p>Page not found</p>' }
-const Home = { template: '<p>home page</p>' }
-const About = { template: '<p>about page</p>' }
-
-const routes = {
-  '/': Home,
-  '/about': About
-}
+Vue.prototype.$axios = axios;
 
 new Vue({
   el: '#app',

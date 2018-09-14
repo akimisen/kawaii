@@ -3,6 +3,7 @@ from flask import Flask, jsonify, request, make_response
 import logging
 import json
 import datetime
+from pymongo import MongoClient
 
 app=Flask(__name__)
 
@@ -10,6 +11,8 @@ tasklist={
 	'0':'task0',
 	'1':'task1'
 }
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 class TasklistApi(MethodView):
 	def get(self):
@@ -31,17 +34,30 @@ def index():
 
 @app.route('/api', methods=['GET','POST'])
 def api():
-	params = request.json if request.method == "POST" else request.args
-	try:
-		response = make_response(jsonify(code=200, status=0, message='ok', data={}))
-		response.headers['Access-Control-Allow-Origin'] = '*'
-		response.headers['Access-Control-Allow-Methods'] = ['GET','POST']
-		response.headers['Access-Control-Allow-Headers'] = 'x-requested-with,content-type'
-	except Exception as e:
-		logging.exception(e)
-	# with open('tc {}.json'.format(datetime.datetime.now().strftime('%Y%m%d %H-%M-%S')),'w',encoding='gbk') as json_file:
-	# 	json.dump(params,json_file,ensure_ascii=False)
-	return response
+	if request.method:
+		params = request.get_json(force=True)
+		api = params['api']
+		try:
+			response = make_response(jsonify(code=200, status=0, message='ok', data={'api':api}))
+			response.headers['Access-Control-Allow-Origin'] = '*'
+			response.headers['Access-Control-Allow-Methods'] = ['GET','POST']
+			response.headers['Access-Control-Allow-Headers'] = 'x-requested-with,content-type'
+		except Exception as e:
+			logging.exception(e)
+
+		try:
+			conn = MongoClient(host='localhost', port=27017)
+			col = conn.kawaii[api]
+			insert_data=params
+			insert_data['datetime']=datetime.datetime.now().strftime('%Y%m%d %H:%M:%S')
+			col.insert_one(insert_data)
+		except Exception as e:
+			logging.exception(e)
+		finally:
+			conn.close()
+		# # with open('tc {}.json'.),'w',encoding='gbk') as json_file:
+		# # 	json.dump(params,json_file,ensure_ascii=False)
+		return response
 
 def shutdown_server():
 	func = request.environ.get('werkzeug.server.shutdown')
@@ -59,3 +75,4 @@ app.add_url_rule('/api/tasks/<int:task_id>', view_func=TaskApi.as_view('task'))
 
 if __name__ == '__main__':
 	app.run(debug=True)
+

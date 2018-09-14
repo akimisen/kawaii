@@ -46,7 +46,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit()">创建案例</el-button>
+        <el-button type="primary" @click="init_tc()">创建案例</el-button>
         <el-button>取消</el-button>
       </el-form-item>
     </el-form>
@@ -55,17 +55,19 @@
 </template>
 
 <script>
+  import querystring from 'querystring';
   export default {
     data() {
       return {
-        form: {
+        form: { 
+          api: 'tc_info',
           title: '',
           module: '',
           version: '',
           pkg: '',
           jira1: '',
           jira1_select: '1',
-          jira2: '',
+          jira2: 'xxxx',
           author: '钱秋实',
           date: '',
           template: '',
@@ -74,8 +76,8 @@
       };
     },
     methods: {
-      onSubmit() {
-        var data = JSON.stringify(this.form);
+      init_tc() {
+        var data = querystring.stringify(this.form);
         console.log(data);
         this.$http.post('http://127.0.0.1:5000/api', data).then(function (response) {
           console.log(response);
