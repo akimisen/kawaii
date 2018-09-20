@@ -7,16 +7,19 @@ from pymongo import MongoClient
 
 app=Flask(__name__)
 
-tasklist={
-	'0':'task0',
-	'1':'task1'
-}
+tasklist=[
+	{'jira1':'secxxxx','jira2':'stestxxx','pkg':'专题包xx','module':'管理','version':'1.9.1.0','status':False}
+	]
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 class TasklistApi(MethodView):
 	def get(self):
-		return jsonify(tasklist)
+		response = make_response(jsonify(tasklist))
+		response.headers['Access-Control-Allow-Origin'] = '*'
+		response.headers['Access-Control-Allow-Methods'] = ['GET','POST']
+		response.headers['Access-Control-Allow-Headers'] = 'x-requested-with,content-type'
+		return response
 
 	def post(self):
 		pass
