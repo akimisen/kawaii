@@ -78,15 +78,33 @@
         status: false
       };
     },
+    created() {
+      
+    },
     methods: {
       submitForm(form_name) {
         var tc_data= JSON.stringify(this[form_name]);
         console.log(tc_data);
-        this.$axios.post('http://127.0.0.1:5000/api', tc_data).then(function (response) {
-          console.log(response);
-        }).catch(function (error) {
-          console.log(error);
-        });
+        if(!this.status) {
+          var tc={};
+          tc.jira1 = this.dynamic_tc_form.jira1;
+          tc.pkg = this.dynamic_tc_form.pkg;
+          tc.title = this.dynamic_tc_form.title;
+          tc.module = this.dynamic_tc_form.module;
+          tc.version = this.dynamic_tc_form.version;
+          tc.jira2 = this.dynamic_tc_form.jira2;
+          tc.author = this.dynamic_tc_form.author;
+          tc.date=this.dynamic_tc_form.date;
+          localStorage.tc = JSON.stringify(tc);
+          console.log('stored tc:'+JSON.stringify(tc));
+        }else{
+          localStorage.clear();
+        }
+        // this.$axios.post('http://127.0.0.1:5000/api', tc_data).then(function (response) {
+        //   console.log(response);
+        // }).catch(function (error) {
+        //   console.log(error);
+        // });
       },
       resetForm(form_name) {
         this.$refs[form_name].resetFields();
